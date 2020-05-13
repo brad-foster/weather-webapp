@@ -7,14 +7,20 @@ const forecast = (latitude, longitude, callback) => {
         if (error) {
             callback('Unable to connect to weather service!');
         } else if (body.error) {
-            callback('Unable to find location')
+            callback('Unable to find location!');
         } else {
+            console.log(body)
             const current = body.current, daily = body.daily;
             const temperature = current.temperature, precipProbability = current.precip;
             const forecast = current.weather_descriptions[0] + '. It is currently ' + temperature + ' degrees out. There is a ' + precipProbability + '% chance of rain.';
-            callback(null, { forecast });
+            const windInformation = 'Winds are currently at ' + current.wind_speed + 'mph from ' + current.wind_dir + '.';
+            const weather = {
+                forecast,
+                windInformation
+            }
+            callback(null, { weather });
         }
     })
 }
 
-module.exports = forecast
+module.exports = forecast;
